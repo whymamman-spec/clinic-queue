@@ -26,3 +26,6 @@ Thumbs.db
 
 # VS Code
 .vscode/settings.json
+
+# SQLite database
+server/database/*.db
