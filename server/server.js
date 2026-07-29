@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import { initializeDatabase } from "./database/db.js";
 import departmentRoutes from "./routes/departmentRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 // Register routes
 //===============================
 app.use("/api/departments", departmentRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 // ==============================
 // Health Check Route
