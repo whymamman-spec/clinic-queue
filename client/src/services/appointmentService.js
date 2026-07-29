@@ -14,3 +14,12 @@ export async function getAvailableSlots(departmentId, date) {
 
   return response.data;
 }
+
+/**
+ * Create a new appointment.
+ */
+export async function createAppointment(appointmentData) {
+  const response = await api.post("/appointments", appointmentData);
+
+  return response.data;
+}

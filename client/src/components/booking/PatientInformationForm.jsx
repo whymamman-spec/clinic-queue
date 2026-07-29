@@ -67,6 +67,15 @@ function PatientInformationForm({
           />
         </div>
       </div>
+
+      <div className="mt-10">
+        <button
+          type="button"
+          className="w-full rounded-lg bg-blue-600 py-3 text-white font-semibold transition hover:bg-blue-700"
+        >
+          Book Appointment
+        </button>
+      </div>
     </>
   );
 }
