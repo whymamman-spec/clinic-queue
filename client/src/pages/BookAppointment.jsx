@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { getDepartments } from "../services/departmentService";
 import { getAvailableSlots } from "../services/appointmentService";
+import DepartmentSelect from "../components/booking/DepartmentSelect";
+import DatePicker from "../components/booking/DatePicker";
+import TimeSlotGrid from "../components/booking/TimeSlotGrid";
 
 function BookAppointment() {
   // -----------------------------
@@ -92,76 +95,26 @@ function BookAppointment() {
           </p>
 
           {/* Department */}
-          <div className="mt-10">
-            <label htmlFor="department" className="block mb-2 font-medium">
-              Department
-            </label>
-
-            <select
-              id="department"
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">-- Select a Department --</option>
-
-              {departments.map((department) => (
-                <option key={department.id} value={department.id}>
-                  {department.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <DepartmentSelect
+            departments={departments}
+            selectedDepartment={selectedDepartment}
+            setSelectedDepartment={setSelectedDepartment}
+          />
 
           {/* Appointment Date */}
-          <div className="mt-8">
-            <label htmlFor="appointmentDate" className="block mb-2 font-medium">
-              Appointment Date
-            </label>
-
-            <input
-              type="date"
-              id="appointmentDate"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
-              className="w-full rounded-lg border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <DatePicker
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
 
           {/* Available Slots */}
-          <div className="mt-8">
-            <label className="block mb-3 font-medium">
-              Available Time Slots
-            </label>
-
-            {!selectedDepartment || !selectedDate ? (
-              <p className="text-slate-500">
-                Select a department and date to view available slots.
-              </p>
-            ) : availableSlots.length === 0 ? (
-              <p className="text-red-600">
-                No appointment slots are available for this date.
-              </p>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {availableSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    onClick={() => setSelectedTime(slot)}
-                    className={`rounded-lg border p-3 font-medium transition ${
-                      selectedTime === slot
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-slate-700 border-slate-300 hover:bg-blue-50"
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <TimeSlotGrid
+            selectedDepartment={selectedDepartment}
+            selectedDate={selectedDate}
+            availableSlots={availableSlots}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+          />
 
           {/* Divider */}
           <hr className="my-10 border-slate-200" />
