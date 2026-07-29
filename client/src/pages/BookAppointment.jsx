@@ -4,6 +4,7 @@ import { getAvailableSlots } from "../services/appointmentService";
 import DepartmentSelect from "../components/booking/DepartmentSelect";
 import DatePicker from "../components/booking/DatePicker";
 import TimeSlotGrid from "../components/booking/TimeSlotGrid";
+import PatientInformationForm from "../components/booking/PatientInformationForm";
 
 function BookAppointment() {
   // -----------------------------
@@ -14,6 +15,11 @@ function BookAppointment() {
   const [selectedDate, setSelectedDate] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
+
+  const [patientName, setPatientName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -124,36 +130,14 @@ function BookAppointment() {
             Patient Information
           </h2>
 
-          <p className="mt-2 text-slate-600">
-            Please provide your contact details so we can confirm your
-            appointment.
-          </p>
-
-          <div className="mt-8 space-y-6">
-            <div>
-              <label className="block mb-2 font-medium">Full Name</label>
-
-              <p className="text-slate-400 italic">
-                (Input field coming next lesson)
-              </p>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">Phone Number</label>
-
-              <p className="text-slate-400 italic">
-                (Input field coming next lesson)
-              </p>
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">Email (Optional)</label>
-
-              <p className="text-slate-400 italic">
-                (Input field coming next lesson)
-              </p>
-            </div>
-          </div>
+          <PatientInformationForm
+            patientName={patientName}
+            setPatientName={setPatientName}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            email={email}
+            setEmail={setEmail}
+          />
         </div>
       </div>
     </section>
