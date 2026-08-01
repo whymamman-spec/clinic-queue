@@ -3,6 +3,8 @@ import express from "express";
 import {
   getAvailableSlots,
   createAppointment,
+  getAppointmentByReference,
+  cancelAppointment,
 } from "../controllers/appointmentController.js";
 
 const router = express.Router();
@@ -17,6 +19,10 @@ const router = express.Router();
  * /api/appointments/available-slots?departmentId=1&date=2026-08-01
  */
 router.get("/available-slots", getAvailableSlots);
+
+router.get("/:bookingReference", getAppointmentByReference);
+
+router.patch("/:bookingReference/cancel", cancelAppointment);
 
 router.post("/", createAppointment);
 

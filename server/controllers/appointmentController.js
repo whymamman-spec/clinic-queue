@@ -193,3 +193,104 @@ export async function createAppointment(req, res) {
     });
   }
 }
+
+/**
+ * GET /api/appointments/:bookingReference
+ *
+ * Retrieves a single appointment using its booking reference.
+ */
+export async function getAppointmentByReference(req, res) {
+  try {
+    const db = req.app.locals.db;
+
+    const { bookingReference } = req.params;
+    console.log("Looking up booking reference:", bookingReference);
+
+    const appointment = await db.get(
+      `
+      SELECT
+        appointments.booking_reference,
+        appointments.patient_name,
+        appointments.phone,
+        appointments.email,
+        appointments.appointment_date,
+        appointments.appointment_time,
+        appointments.status,
+        departments.name AS department_name
+      FROM appointments
+      JOIN departments
+        ON appointments.department_id = departments.id
+      WHERE appointments.booking_reference = ?
+      `,
+      [bookingReference],
+    );
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: "Appointment not found.",
+      });
+    }
+
+    res.status(200).json(appointment);
+  } catch (error) {
+    console.error("Lookup error:", error);
+
+    res.status(500).json({
+      message: "Unable to retrieve appointment.",
+    });
+  }
+}
+
+/**
+ * PATCH /api/appointments/:bookingReference/cancel
+ *
+ * Cancels an appointment.
+ */
+export async function cancelAppointment(req, res) {
+  try {
+    const db = req.app.locals.db;
+
+    const { bookingReference } = req.params;
+
+    // Check appointment exists
+    const appointment = await db.get(
+      `
+      SELECT id, status
+      FROM appointments
+      WHERE booking_reference = ?
+      `,
+      [bookingReference],
+    );
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: "Appointment not found.",
+      });
+    }
+
+    if (appointment.status === "Cancelled") {
+      return res.status(409).json({
+        message: "Appointment has already been cancelled.",
+      });
+    }
+
+    await db.run(
+      `
+      UPDATE appointments
+      SET status = 'Cancelled'
+      WHERE booking_reference = ?
+      `,
+      [bookingReference],
+    );
+
+    res.status(200).json({
+      message: "Appointment cancelled successfully.",
+    });
+  } catch (error) {
+    console.error("Cancellation error:", error);
+
+    res.status(500).json({
+      message: "Unable to cancel appointment.",
+    });
+  }
+}
