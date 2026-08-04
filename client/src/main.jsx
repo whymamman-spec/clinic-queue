@@ -13,6 +13,7 @@ import BookAppointment from "./pages/BookAppointment";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import ManageAppointment from "./pages/ManageAppointment";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/book-appointment" element={<BookAppointment />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/manage-appointment" element={<ManageAppointment />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

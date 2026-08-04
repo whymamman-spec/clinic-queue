@@ -23,3 +23,21 @@ export async function createAppointment(appointmentData) {
 
   return response.data;
 }
+
+/**
+ * Retrieve an appointment using its booking reference.
+ */
+export async function getAppointmentByReference(bookingReference) {
+  const response = await api.get(`/appointments/${bookingReference}`);
+
+  return response.data;
+}
+
+/**
+ * Cancel an appointment using its booking reference.
+ */
+export async function cancelAppointment(bookingReference) {
+  const response = await api.patch(`/appointments/${bookingReference}/cancel`);
+
+  return response.data;
+}
