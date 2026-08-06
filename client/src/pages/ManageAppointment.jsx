@@ -1,14 +1,18 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+
 import {
   getAppointmentByReference,
   cancelAppointment,
 } from "../services/appointmentService";
+import ConfirmationModal from "../components/ui/ConfirmationModal";
 
 function ManageAppointment() {
   const [bookingReference, setBookingReference] = useState("");
   const [appointment, setAppointment] = useState(null);
   const [error, setError] = useState("");
   const [isCancelling, setIsCancelling] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -32,12 +36,6 @@ function ManageAppointment() {
   async function handleCancel() {
     if (!appointment) return;
 
-    const confirmed = window.confirm(
-      "Are you sure you want to cancel this appointment?",
-    );
-
-    if (!confirmed) return;
-
     setIsCancelling(true);
 
     try {
@@ -47,10 +45,14 @@ function ManageAppointment() {
         ...appointment,
         status: "Cancelled",
       });
+
+      setShowCancelModal(false);
+
+      toast.success("Appointment cancelled successfully.");
     } catch (error) {
       console.error(error);
 
-      alert("Unable to cancel appointment.");
+      toast.error("Unable to cancel appointment.");
     } finally {
       setIsCancelling(false);
     }
@@ -151,7 +153,7 @@ function ManageAppointment() {
                   <div className="pt-6">
                     <button
                       type="button"
-                      onClick={handleCancel}
+                      onClick={() => setShowCancelModal(true)}
                       disabled={
                         appointment.status === "Cancelled" || isCancelling
                       }
@@ -174,6 +176,17 @@ function ManageAppointment() {
           )}
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={showCancelModal}
+        title="Cancel Appointment"
+        message="Are you sure you want to cancel this appointment? This action cannot be undone."
+        confirmText="Yes, Cancel"
+        cancelText="Keep Appointment"
+        onConfirm={handleCancel}
+        onCancel={() => setShowCancelModal(false)}
+        isLoading={isCancelling}
+      />
     </section>
   );
 }
