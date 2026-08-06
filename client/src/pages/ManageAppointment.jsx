@@ -13,12 +13,14 @@ function ManageAppointment() {
   const [error, setError] = useState("");
   const [isCancelling, setIsCancelling] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     setError("");
     setAppointment(null);
+    setIsSearching(true);
 
     try {
       const data = await getAppointmentByReference(bookingReference);
@@ -30,6 +32,8 @@ function ManageAppointment() {
       console.error(error);
 
       setError("Appointment not found.");
+    } finally {
+      setIsSearching(false);
     }
   }
 
@@ -93,9 +97,15 @@ function ManageAppointment() {
 
             <button
               type="submit"
-              className="w-full rounded-lg bg-blue-600 text-white py-3 font-semibold hover:bg-blue-700 transition"
+              disabled={isSearching}
+              className={`w-full rounded-lg px-4 py-3 font-semibold transition
+${
+  isSearching
+    ? "bg-blue-300 cursor-not-allowed text-white"
+    : "bg-blue-600 hover:bg-blue-700 text-white"
+}`}
             >
-              Find Appointment
+              {isSearching ? "Searching..." : "Find Appointment"}
             </button>
           </form>
 

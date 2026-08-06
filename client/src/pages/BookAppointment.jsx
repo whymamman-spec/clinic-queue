@@ -231,7 +231,11 @@ function BookAppointment() {
                   setEmail("");
                   setValidationError("");
                 }}
-                className="w-full rounded-lg bg-blue-600 py-3 text-white font-semibold transition hover:bg-blue-700"
+                className={`w-full rounded-lg py-3 font-semibold transition ${
+                  isSubmitting
+                    ? "bg-blue-300 cursor-not-allowed text-white"
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                }`}
               >
                 Book Another Appointment
               </button>
