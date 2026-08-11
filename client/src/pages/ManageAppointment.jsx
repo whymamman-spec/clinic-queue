@@ -1,5 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { formatDate } from "../utils/formatDate";
 
 import {
   getAppointmentByReference,
@@ -99,13 +101,20 @@ function ManageAppointment() {
               type="submit"
               disabled={isSearching}
               className={`w-full rounded-lg px-4 py-3 font-semibold transition
-${
-  isSearching
-    ? "bg-blue-300 cursor-not-allowed text-white"
-    : "bg-blue-600 hover:bg-blue-700 text-white"
-}`}
+  ${
+    isSearching
+      ? "bg-blue-300 cursor-not-allowed text-white"
+      : "bg-blue-600 hover:bg-blue-700 text-white"
+  }`}
             >
-              {isSearching ? "Searching..." : "Find Appointment"}
+              {isSearching ? (
+                <span className="flex items-center justify-center gap-2">
+                  <LoadingSpinner />
+                  Searching...
+                </span>
+              ) : (
+                "Find Appointment"
+              )}
             </button>
           </form>
 
@@ -149,7 +158,7 @@ ${
 
                 <div>
                   <span className="font-semibold">Date:</span>{" "}
-                  {appointment.appointment_date}
+                  {formatDate(appointment.appointment_date)}
                 </div>
 
                 <div>
@@ -159,7 +168,15 @@ ${
 
                 <div>
                   <span className="font-semibold">Status:</span>{" "}
-                  {appointment.status}
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
+                      appointment.status === "Confirmed"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {appointment.status}
+                  </span>
                   <div className="pt-6">
                     <button
                       type="button"
@@ -173,11 +190,16 @@ ${
                           : "bg-red-600 text-white hover:bg-red-700"
                       }`}
                     >
-                      {isCancelling
-                        ? "Cancelling..."
-                        : appointment.status === "Cancelled"
-                          ? "Appointment Cancelled"
-                          : "Cancel Appointment"}
+                      {isCancelling ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <LoadingSpinner />
+                          Cancelling...
+                        </span>
+                      ) : appointment.status === "Cancelled" ? (
+                        "Appointment Cancelled"
+                      ) : (
+                        "Cancel Appointment"
+                      )}
                     </button>
                   </div>
                 </div>

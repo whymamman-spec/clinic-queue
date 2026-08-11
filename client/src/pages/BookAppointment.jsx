@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-
+import { formatDate } from "../utils/formatDate";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { getDepartments } from "../services/departmentService";
 import {
   getAvailableSlots,
@@ -193,7 +194,7 @@ function BookAppointment() {
 
               <div className="flex justify-between border-b pb-2">
                 <span className="font-medium">Appointment Date</span>
-                <span>{selectedDate}</span>
+                <span>{formatDate(selectedDate)}</span>
               </div>
 
               <div className="flex justify-between border-b pb-2">
@@ -298,9 +299,20 @@ function BookAppointment() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-lg bg-blue-600 py-3 text-white font-semibold transition hover:bg-blue-700"
+                className={`w-full rounded-lg py-3 font-semibold transition ${
+                  isSubmitting
+                    ? "bg-blue-300 cursor-not-allowed text-white"
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                }`}
               >
-                {isSubmitting ? "Booking..." : "Book Appointment"}
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <LoadingSpinner />
+                    Booking...
+                  </span>
+                ) : (
+                  "Book Appointment"
+                )}
               </button>
             </div>
           </form>
