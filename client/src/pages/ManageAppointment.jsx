@@ -19,6 +19,10 @@ function ManageAppointment() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (!bookingReference.trim()) {
+      setError("Please enter your booking reference.");
+      return;
+    }
 
     setError("");
     setAppointment(null);
@@ -33,7 +37,15 @@ function ManageAppointment() {
     } catch (error) {
       console.error(error);
 
-      setError("Appointment not found.");
+      if (error.response?.status === 404) {
+        setError(
+          "We couldn't find an appointment with that booking reference. Please check the reference and try again.",
+        );
+      } else {
+        setError(
+          "Unable to retrieve your appointment right now. Please try again later.",
+        );
+      }
     } finally {
       setIsSearching(false);
     }
@@ -119,8 +131,23 @@ function ManageAppointment() {
           </form>
 
           {error && (
-            <div className="mt-6 rounded-lg bg-red-50 border border-red-200 p-4">
-              <p className="text-red-700 font-medium">{error}</p>
+            <div
+              className="mt-6 rounded-xl border border-red-200 bg-red-50 p-5"
+              role="alert"
+            >
+              <div className="flex items-start gap-3">
+                <div className="text-xl" aria-hidden="true">
+                  ⚠️
+                </div>
+
+                <div>
+                  <p className="font-semibold text-red-800">
+                    Unable to find appointment
+                  </p>
+
+                  <p className="mt-1 text-sm leading-6 text-red-700">{error}</p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -204,6 +231,23 @@ function ManageAppointment() {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {!appointment && !error && (
+            <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 text-center">
+              <div className="text-4xl" aria-hidden="true">
+                📋
+              </div>
+
+              <h2 className="mt-4 text-xl font-semibold text-slate-800">
+                Check your appointment
+              </h2>
+
+              <p className="mt-2 text-slate-600">
+                Enter the booking reference you received when you booked your
+                appointment to view its details or cancel it.
+              </p>
             </div>
           )}
         </div>
