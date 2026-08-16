@@ -1,93 +1,221 @@
-# 🏥 ClinicQueue
+# ClinicQueue
 
-> A full-stack clinic appointment booking system designed to help Nigerian clinics reduce long queues and improve the patient appointment experience.
+> **ClinicQueue** is a full-stack clinic appointment booking application
+> designed to help Nigerian clinics reduce long queues and unnecessary
+> waiting times by allowing patients to view available appointment
+> slots, book appointments, retrieve their booking details, and cancel
+> appointments.
 
-ClinicQueue allows patients to view available departments, select appointment dates and available time slots, book appointments, receive a unique booking reference, and later look up or cancel their appointments.
-
----
-
-## 🎓 Project Context
-
-**ClinicQueue is the capstone project for the 3MTT NextGen Software Development cohort.**
-
-The project was developed as a practical demonstration of the skills acquired during the cohort and forms part of the requirements for certification as a **Software Developer**.
-
-Rather than building only a demonstration interface, the project was developed as a functional **Minimum Viable Product (MVP)** with a React frontend, Express backend, and SQLite database.
+ClinicQueue was developed as the **capstone project for the 3MTT NextGen
+Software Development cohort** and was a required project for
+completion/certification as a **Software Developer**.
 
 ---
 
-# 📌 Problem Statement
+## Table of Contents
 
-Many healthcare facilities experience long queues and extended waiting times because patients often have to physically visit a clinic before knowing when they can be attended to.
-
-This can result in:
-
-- Long waiting times
-- Overcrowded reception areas
-- Inefficient appointment scheduling
-- Difficulty managing available appointment slots
-- Poor visibility into existing appointments
-- Unnecessary trips to healthcare facilities
-
-ClinicQueue addresses this problem by providing a simple digital appointment-booking workflow.
-
----
-
-# 💡 Solution
-
-ClinicQueue provides a centralized appointment booking system where patients can:
-
-1. Select a medical department.
-2. Select an appointment date.
-3. View available appointment time slots.
-4. Enter their personal/contact information.
-5. Book an appointment.
-6. Receive a unique booking reference.
-7. Look up an existing appointment using that reference.
-8. Cancel an appointment when necessary.
-9. View the updated appointment status after cancellation.
-
-The system automatically removes booked time slots from availability while making cancelled slots available for future bookings.
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Solution](#solution)
+- [Project Goals](#project-goals)
+- [MVPs and Delivery](#mvps-and-delivery)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Application Architecture](#application-architecture)
+- [Project Structure](#project-structure)
+- [Appointment Booking Logic](#appointment-booking-logic)
+- [API Overview](#api-overview)
+- [User Experience and UI](#user-experience-and-ui)
+- [Validation and Error Handling](#validation-and-error-handling)
+- [Testing and Verification](#testing-and-verification)
+- [Deployment](#deployment)
+- [Deployment Issue: SQLite and
+  GLIBC](#deployment-issue-sqlite-and-glibc)
+- [SQLite Production Limitation](#sqlite-production-limitation)
+- [Environment Variables](#environment-variables)
+- [Running the Project Locally](#running-the-project-locally)
+- [Future Improvements](#future-improvements)
+- [Learning Outcomes](#learning-outcomes)
+- [3MTT NextGen Capstone](#3mtt-nextgen-capstone)
+- [Project Status](#project-status)
+- [Author](#author)
 
 ---
 
-# 🎯 Minimum Viable Product (MVP)
+## Project Overview
 
-The project was planned and delivered around a focused MVP rather than attempting to build a complete hospital management system.
+ClinicQueue is a clinic appointment management application built around
+a simple idea:
 
-### MVP 1 — Department & Appointment Discovery
+> **Patients should not have to spend hours waiting in a clinic simply
+> to access routine healthcare services.**
 
-Patients can:
+The application provides a digital workflow through which patients can
+select a department, choose a date, view available appointment slots,
+provide their information, and receive a unique booking reference.
 
-- View available clinic departments.
-- Select a department.
-- Select an appointment date.
-- View available appointment slots.
+Patients can subsequently use that booking reference to retrieve their
+appointment and cancel it when necessary.
 
-### MVP 2 — Appointment Booking
+The project was developed as a practical full-stack software development
+project, covering frontend development, backend API development,
+database integration, validation, user experience, testing, Git/GitHub
+workflow, and cloud deployment.
 
-Patients can:
+---
 
-- Enter their name.
-- Enter their phone number.
-- Optionally provide an email address.
-- Select a department, date, and time.
-- Submit an appointment request.
-- Receive a unique booking reference.
+## Problem Statement
 
-### MVP 3 — Appointment Availability Management
+Many clinics experience challenges such as:
 
-The backend:
+- Long queues at registration and appointment points
+- Unpredictable waiting times
+- Manual appointment processes
+- Limited visibility into available appointment slots
+- Difficulty managing cancellations
+- Inefficient use of clinic staff time
+- Patients spending unnecessary time physically waiting for services
 
-- Generates appointment time slots.
-- Checks existing bookings.
-- Prevents duplicate bookings for the same department, date, and time.
-- Removes booked slots from availability.
-- Makes cancelled slots available again.
+ClinicQueue addresses the appointment-booking portion of this problem by
+moving the initial scheduling process online.
 
-### MVP 4 — Appointment Lookup
+---
 
-Patients can use their booking reference to retrieve:
+## Solution
+
+ClinicQueue provides a simple web-based appointment workflow:
+
+1.  The patient selects a department.
+2.  The patient selects an appointment date.
+3.  The system retrieves available appointment slots.
+4.  The patient selects an available time.
+5.  The patient enters their contact information.
+6.  The appointment is submitted to the backend.
+7.  The backend validates and stores the appointment.
+8.  A unique booking reference is generated.
+9.  The patient can later retrieve the appointment using the reference.
+10. The patient can cancel the appointment when necessary.
+11. A cancelled appointment releases its time slot for future booking.
+
+---
+
+## Project Goals
+
+- Build a functional full-stack web application.
+- Demonstrate REST API development.
+- Connect a React frontend to an Express backend.
+- Integrate a relational database.
+- Implement appointment availability logic.
+- Prevent double-booking of appointment slots.
+- Support appointment cancellation.
+- Provide useful validation and error feedback.
+- Create a responsive user interface.
+- Deploy the application to the cloud.
+- Demonstrate practical software development skills required for the
+  3MTT NextGen certification.
+
+---
+
+# MVPs and Delivery
+
+## MVP 1 --- Department and Appointment Selection
+
+### Requirement
+
+Patients should be able to select:
+
+- A clinic department
+- An appointment date
+- An available appointment time
+
+### Delivered
+
+- Department data is retrieved from the backend API.
+- Appointment dates can be selected through the booking interface.
+- Available time slots are retrieved dynamically.
+- A patient cannot proceed without the required appointment
+  information.
+
+**Status: Delivered**
+
+---
+
+## MVP 2 --- Appointment Booking
+
+### Requirement
+
+Patients should be able to submit their appointment information and
+receive confirmation.
+
+### Delivered
+
+The booking form collects:
+
+- Patient name
+- Phone number
+- Email address (optional)
+- Department
+- Appointment date
+- Appointment time
+
+The backend creates the appointment and generates a unique booking
+reference.
+
+Example:
+
+```text
+CQ-9QE4SB
+```
+
+The confirmation screen displays the booking reference and appointment
+details.
+
+**Status: Delivered**
+
+---
+
+## MVP 3 --- Appointment Availability and Slot Management
+
+### Requirement
+
+The system should prevent multiple patients from booking the same
+appointment slot.
+
+### Delivered
+
+Appointment availability is calculated by the backend.
+
+Once a slot is booked, it is no longer returned as available for the
+relevant department/date combination.
+
+When an appointment is cancelled, the slot becomes available again.
+
+```text
+Available
+    ↓
+Booked / Confirmed
+    ↓
+Cancelled
+    ↓
+Available Again
+```
+
+**Status: Delivered**
+
+---
+
+## MVP 4 --- Appointment Management
+
+### Requirement
+
+Patients should be able to retrieve an existing appointment.
+
+### Delivered
+
+The **Manage Appointment** page allows a patient to enter a booking
+reference and retrieve the corresponding appointment.
+
+The system displays:
 
 - Booking reference
 - Patient name
@@ -98,424 +226,813 @@ Patients can use their booking reference to retrieve:
 - Appointment time
 - Appointment status
 
-### MVP 5 — Appointment Cancellation
-
-Patients can:
-
-- Initiate cancellation.
-- Confirm cancellation through a custom confirmation modal.
-- Receive feedback through toast notifications.
-- See their appointment status change to `Cancelled`.
-- Look up the cancelled appointment again.
-
-### MVP 6 — User Experience & Responsive Design
-
-The application includes:
-
-- Responsive layouts
-- Mobile, tablet and desktop support
-- Loading indicators
-- Form validation
-- Error states
-- Empty states
-- Toast notifications
-- Confirmation modal
-- Accessible error messaging
-- Disabled controls during asynchronous operations
+**Status: Delivered**
 
 ---
 
-# ✅ MVP Delivery
+## MVP 5 --- Appointment Cancellation
 
-All planned core MVP functionality was implemented and tested.
+### Requirement
 
-The final acceptance test successfully verified the complete workflow:
+Patients should be able to cancel an existing appointment.
+
+### Delivered
+
+Cancellation includes:
+
+- Appointment lookup
+- Custom confirmation modal
+- Cancellation request
+- Loading state
+- Updated appointment status
+- Release of the appointment slot
+- Success toast notification
+- Error toast notification
+- Disabled cancellation button after cancellation
+
+The application prevents an already cancelled appointment from being
+cancelled again.
+
+**Status: Delivered**
+
+---
+
+## MVP 6 --- Production Deployment
+
+### Requirement
+
+The completed application should be available as a deployed web
+application.
+
+### Delivered
+
+- **Vercel** hosts the React frontend.
+- **Render** hosts the Express backend/API.
+- **SQLite** provides the MVP database.
+- The production frontend successfully communicates with the deployed
+  backend.
+- The major workflows tested locally were retested successfully in
+  production.
+
+**Status: Delivered**
+
+---
+
+# Key Features
+
+## Appointment Booking
+
+- Department selection
+- Date selection
+- Dynamic appointment availability
+- Time-slot selection
+- Patient information form
+- Booking validation
+- Appointment creation
+- Booking reference generation
+- Booking confirmation
+
+## Appointment Management
+
+- Booking reference lookup
+- Appointment detail display
+- Appointment status display
+- Appointment cancellation
+
+## User Experience
+
+- Responsive interface
+- Loading states
+- Form validation
+- Error messages
+- Success messages
+- Toast notifications
+- Custom confirmation modal
+- Disabled states during asynchronous operations
+
+---
+
+# Technology Stack
+
+## Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- Lucide React
+- React Hot Toast
+
+## Backend
+
+- Node.js
+- Express
+- CORS
+- dotenv
+
+## Database
+
+- SQLite
+- sqlite3
+- sqlite package
+
+## Development Tools
+
+- Visual Studio Code
+- Git
+- GitHub
+- Thunder Client
+- Browser Developer Tools
+
+## Deployment
+
+- Vercel --- frontend hosting
+- Render --- backend/API hosting
+- GitHub --- source-code repository
+
+---
+
+# Application Architecture
 
 ```text
-Select Department
-        ↓
-Select Date
-        ↓
-View Available Slots
-        ↓
-Book Appointment
-        ↓
-Receive Booking Reference
-        ↓
-Look Up Appointment
-        ↓
-View Appointment Details
-        ↓
-Cancel Appointment
-        ↓
-Confirmation Modal
-        ↓
-Appointment Status → Cancelled
-        ↓
-Look Up Appointment Again
-        ↓
-Cancelled Appointment Retrieved Successfully
+                     GitHub
+                        │
+               ClinicQueue Repository
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+           client/             server/
+              │                   │
+              ▼                   ▼
+           Vercel              Render
+              │                   │
+       React/Vite UI         Express API
+              │                   │
+              └─────────┬─────────┘
+                        │
+                      SQLite
+```
 
-#🛠️ Technology Stack
-Frontend
-React
-Vite
-Tailwind CSS
-React Router
-Axios
-Lucide React
-React Hot Toast
-Backend
-Node.js
-Express.js
-SQLite
-SQLite3
-sqlite database wrapper
-CORS
-dotenv
-Development Tools
-Visual Studio Code
-Git
-GitHub
-Thunder Client
-DB Browser for SQLite
+The React frontend handles the interface, state, forms, validation, API
+requests, and feedback.
 
-#🏗️ Application Architecture
+The Express backend handles API requests, appointment availability,
+booking, cancellation, booking-reference generation, and database
+operations.
 
-ClinicQueue follows a client-server architecture.
+---
 
-                    ┌─────────────────────┐
-                    │      Patient        │
-                    │     Web Browser     │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   React Frontend    │
-                    │                     │
-                    │  Vite + Tailwind    │
-                    │  React Router       │
-                    │  Axios              │
-                    └──────────┬──────────┘
-                               │
-                         HTTP / REST API
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   Express Backend   │
-                    │                     │
-                    │  Routes             │
-                    │  Controllers        │
-                    │  Utilities          │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   SQLite Database   │
-                    │                     │
-                    │  Departments        │
-                    │  Appointments       │
-                    └─────────────────────┘
-#📂 Project Structure
+# Project Structure
+
+```text
 ClinicQueue/
 │
 ├── client/
 │   ├── src/
+│   │   ├── api/
 │   │   ├── components/
-│   │   │   ├── booking/
-│   │   │   ├── layout/
-│   │   │   └── ui/
-|   |   |   └──appointment/
-│   │   │
-│   │   ├── constants/
-|   |   ├── context/
-|   |   ├── hooks/
-│   │   ├── layouts/
 │   │   ├── pages/
 │   │   ├── services/
-│   │   ├── styles/
-│   │   ├── utils/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   │
+│   │   └── utils/
 │   ├── package.json
 │   └── ...
 │
 ├── server/
 │   ├── controllers/
+│   ├── database/
+│   │   ├── db.js
+│   │   ├── schema.sql
+│   │   └── seed.sql
+│   ├── middleware/
+│   ├── models/
 │   ├── routes/
 │   ├── utils/
-│   ├── database/
-│   └── package.json
-│   └── ...
+│   ├── package.json
+│   └── server.js
+│
 ├── .gitignore
 └── README.md
+```
 
-#🔌 API Endpoints
-Departments
-Get all departments
+---
+
+# Appointment Booking Logic
+
+An appointment is identified by:
+
+```text
+Department
++
+Appointment Date
++
+Appointment Time
+```
+
+The backend checks availability before creating a booking.
+
+A booked slot is removed from the available slots returned to the
+frontend.
+
+When an appointment is cancelled, its status changes to:
+
+```text
+Cancelled
+```
+
+and the time slot can become available again.
+
+This prevents double-booking and maintains the core appointment
+lifecycle.
+
+---
+
+# API Overview
+
+## Departments
+
+```text
 GET /api/departments
+```
 
-Returns the available clinic departments.
+Retrieves available clinic departments.
 
-Appointment Availability
-Get available appointment slots
+## Available Appointment Slots
+
+```text
 GET /api/appointments/available-slots
+```
 
-Query parameters:
+Retrieves slots available for a requested department and date.
 
-departmentId
-date
+## Create Appointment
 
-Example:
-
-GET /api/appointments/available-slots?departmentId=3&date=2026-08-01
-Create Appointment
+```text
 POST /api/appointments
+```
 
-Example request body:
+Creates a new appointment.
 
+Example request:
+
+```json
 {
   "patient_name": "John Doe",
-  "phone": "08012345678",
+  "phone": "08000000000",
   "email": "john@example.com",
-  "department_id": 3,
-  "appointment_date": "2026-08-01",
+  "department_id": 1,
+  "appointment_date": "2026-08-18",
   "appointment_time": "09:00"
 }
-Find Appointment
+```
+
+## Retrieve Appointment
+
+```text
 GET /api/appointments/:bookingReference
+```
 
-Example:
+Retrieves an appointment using its booking reference.
 
-GET /api/appointments/CQ-9QE4SB
-Cancel Appointment
+## Cancel Appointment
+
+```text
 PATCH /api/appointments/:bookingReference/cancel
+```
 
-Example:
+Cancels the specified appointment.
 
-PATCH /api/appointments/CQ-9QE4SB/cancel
+---
 
-#🔐 Appointment Booking Logic
+# User Experience and UI
 
-ClinicQueue uses a booking-reference-based appointment management system.
+ClinicQueue received a final UX/UI polish pass before deployment.
 
-When an appointment is created:
+This included:
 
-The selected department is verified.
-The requested time is validated.
-The system checks whether the slot is already booked.
-A unique booking reference is generated.
-The appointment is stored with a Confirmed status.
+- Responsive layouts
+- Consistent spacing
+- Improved button states
+- Loading indicators
+- Search/loading feedback
+- Custom cancellation confirmation modal
+- Toast notifications
+- Validation messages
+- Error presentation
+- Disabled states during requests
+- Footer spacing adjustments
 
-When an appointment is cancelled:
+The booking and appointment-management workflows were checked across
+responsive layouts before production deployment.
 
-The appointment is located using its booking reference.
-Its status is changed to Cancelled.
-The appointment remains available for lookup.
-Its time slot becomes available for future booking.
+---
 
-This ensures that cancellation does not destroy the appointment record.
+# Validation and Error Handling
 
-#🧪 Testing
+The application validates important user actions before sending
+requests.
 
-The application was tested through both frontend interaction and API testing.
+Examples include:
 
-Testing included:
+- Missing department
+- Missing appointment date
+- Missing appointment time
+- Missing patient name
+- Missing phone number
+- Empty booking reference
+- Appointment not found
+- Appointment cancellation failure
+- Booking failure
+- Occupied appointment slot
 
-Department retrieval
-Available slot retrieval
-Appointment creation
-Duplicate booking prevention
-Booking reference generation
-Appointment lookup
-Invalid booking references
-Empty booking references
-Appointment cancellation
-Cancelled appointment lookup
-Loading states
-Error states
-Toast notifications
-Confirmation modal
-Responsive layouts
+Feedback is provided using inline validation messages, loading states,
+and toast notifications.
 
-API endpoints were tested during development using Thunder Client.
+---
 
-The SQLite database was also inspected during development to verify appointment records and status changes.
+# Testing and Verification
 
-#📱 Responsive Design
+## Local Testing
 
-ClinicQueue was tested across:
+The following workflows were tested locally:
 
-Mobile — approximately 375px width
-Tablet — approximately 768px width
-Desktop — approximately 1440px width
+- Department retrieval
+- Available slot retrieval
+- Appointment booking
+- Booking reference generation
+- Duplicate booking prevention
+- Appointment lookup
+- Appointment cancellation
+- Slot release after cancellation
+- Loading states
+- Validation
+- Error handling
+- Confirmation modal
+- Toast notifications
+- Responsive UI
 
-The application uses responsive Tailwind CSS utilities to provide an appropriate experience across different screen sizes.
+## Production Testing
 
-#🎨 User Experience Features
+After deployment, the same major workflows were tested against the live
+application.
 
-The application includes several UX improvements beyond the basic MVP:
+The production tests confirmed that:
 
-Loading spinners for asynchronous actions
-Disabled buttons during requests
-Success toast notifications
-Error toast notifications
-Custom cancellation confirmation modal
-Empty appointment state
-Friendly validation messages
-Accessible error alerts
-Appointment status badges
-Responsive navigation
-Responsive forms and cards
+- The Vercel frontend loads successfully.
+- The frontend communicates with the Render backend.
+- Department data is retrieved correctly.
+- Appointment booking works.
+- Booking references are generated.
+- Appointment lookup works.
+- Appointment cancellation works.
+- Cancellation feedback works.
+- Validation and error handling work.
+- Responsive behavior remains functional.
 
+**Production functional testing: Passed**
 
-#🚀 Running the Project Locally
-Prerequisites
+---
 
-Make sure you have installed:
+# Deployment
 
-Node.js
-npm
-Git
-1. Clone the repository
-git clone https://github.com/whymamman-spec/clinic-queue.git
+ClinicQueue uses a two-service deployment architecture:
 
-Then:
+```text
+React/Vite Frontend
+        │
+        ▼
+     Vercel
+        │
+        │ API requests
+        ▼
+Express Backend
+        │
+        ▼
+     Render
+        │
+        ▼
+     SQLite
+```
 
-cd clinic-queue
-2. Install backend dependencies
+## Frontend
 
-From the project root:
+The React/Vite client is deployed to Vercel.
 
+Production frontend:
+
+`https://clinic-queue-xi.vercel.app`
+
+The frontend uses:
+
+```env
+VITE_API_URL=https://clinic-queue-kqnd.onrender.com/api
+```
+
+## Backend
+
+The Express API is deployed to Render.
+
+Production backend:
+
+`https://clinic-queue-kqnd.onrender.com`
+
+The backend exposes:
+
+```text
+GET /
+```
+
+as a health-check endpoint.
+
+---
+
+# Deployment Issue: SQLite and GLIBC
+
+During the initial Render deployment, the build completed successfully
+but the service failed while starting.
+
+The key error was:
+
+```text
+Error: /lib/x86_64-linux-gnu/libm.so.6:
+version `GLIBC_2.38' not found
+(required by .../sqlite3.node)
+
+code: ERR_DLOPEN_FAILED
+```
+
+## Why It Happened
+
+The project uses `sqlite3`, which contains a native Node.js binary.
+
+The installed SQLite native binary required a newer version of the GNU C
+Library (`glibc`) than the Render runtime provided.
+
+In simplified form:
+
+```text
+Local/build environment
+        ↓
+sqlite3 native binary
+        ↓
+Requires GLIBC_2.38
+
+Render runtime
+        ↓
+Older GLIBC version
+        ↓
+Native binary cannot load
+```
+
+The application code was not the immediate cause. The issue was
+compatibility between the native `sqlite3` binary and the Linux runtime
+used by the hosting platform.
+
+## How It Was Solved
+
+The SQLite native module was rebuilt from source for the deployment
+environment.
+
+The relevant approach was:
+
+```bash
 npm install
-3. Install frontend dependencies
+npm rebuild sqlite3 --build-from-source
+```
+
+The Render build/cache was also cleared so the incompatible native
+binary would not continue to be reused.
+
+After rebuilding `sqlite3` for the target environment, the service
+started successfully and the Render deployment became live.
+
+This provided an important deployment lesson: **native Node.js
+dependencies may require environment-specific compilation when prebuilt
+binaries are incompatible with the hosting runtime.**
+
+---
+
+# SQLite Production Limitation
+
+ClinicQueue currently uses SQLite because it is lightweight, simple to
+configure, and appropriate for demonstrating the MVP.
+
+However, the database is stored as a local file:
+
+```text
+server/database/clinicqueue.db
+```
+
+This is suitable for the capstone MVP and demonstration environment, but
+it is **not an ideal production database architecture for a real clinic
+appointment system**.
+
+A production application would require persistent managed storage,
+backups, recovery procedures, reliable multi-instance access, and
+stronger scalability.
+
+Because the deployed application uses a local SQLite file on the backend
+service, persistent data should not be treated as guaranteed permanent
+storage in a cloud environment where the service filesystem may be
+ephemeral or replaced.
+
+## Future Production Database
+
+A future production version should migrate from SQLite to a managed
+relational database such as:
+
+```text
+PostgreSQL
+```
+
+The API/database separation makes such a migration practical.
+
+---
+
+# Environment Variables
+
+## Frontend
+
+Create:
+
+```text
+client/.env
+```
+
+For local development:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+For production:
+
+```env
+VITE_API_URL=https://clinic-queue-kqnd.onrender.com/api
+```
+
+## Backend
+
+The backend supports the hosting platform's assigned port:
+
+```env
+PORT=5000
+```
+
+with:
+
+```js
+const PORT = process.env.PORT || 5000;
+```
+
+---
+
+# Running the Project Locally
+
+## 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd ClinicQueue
+```
+
+## 2. Install Frontend Dependencies
+
+```bash
 cd client
 npm install
-4. Start the backend
+```
 
-From the project root:
+## 3. Configure Frontend Environment Variables
 
+Create:
+
+```text
+client/.env
+```
+
+and add:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+## 4. Start the Frontend
+
+```bash
 npm run dev
+```
 
-The backend runs on:
-
-http://localhost:5000
-5. Start the frontend
+## 5. Install Backend Dependencies
 
 Open another terminal:
 
-cd client
-npm run dev
-
-Vite will provide the frontend URL, normally:
-
-http://localhost:5173
-
-Open that address in your browser.
-
-⚙️ Environment Variables
-
-If environment variables are required, create an appropriate .env file based on the project's configuration.
-
-Do not commit sensitive credentials or private configuration files to GitHub.
-
-#🔮 Future Improvements
-
-ClinicQueue's MVP intentionally focuses on the core appointment workflow.
-
-Potential future improvements include:
-
-Patient accounts and authentication
-Doctor/staff accounts
-Clinic administrator dashboard
-Doctor availability management
-SMS appointment reminders
-Email notifications
-Appointment rescheduling
-Multiple clinic locations
-Patient appointment history
-Admin analytics dashboard
-Role-based access control
-PostgreSQL or another production database
-Production deployment
-Automated testing
-Advanced appointment scheduling rules
-
-These features are outside the current MVP scope.
-
-#📚 Learning Outcomes
-
-This project provided practical experience with:
-
-React component architecture
-React state management
-React Router
-Form handling and validation
-REST API integration
-Axios
-Express.js
-API route design
-Controller architecture
-SQLite database operations
-CRUD-style operations
-Database queries
-Booking conflict detection
-Error handling
-Asynchronous JavaScript
-Responsive UI development
-Tailwind CSS
-Git and GitHub
-API testing
-Debugging full-stack applications
-User experience design
-Software project structure
-
-#🎓 3MTT NextGen Capstone
-
-This project was developed as the capstone project for the 3MTT NextGen Software Development cohort.
-
-It represents the practical application of software development concepts learned during the program and was developed to satisfy the capstone requirement associated with the Software Developer certification pathway.
-
-The project emphasizes not only writing code, but also:
-
-Problem identification
-MVP definition
-Solution design
-Frontend development
-Backend development
-Database design
-API development
-Testing
-Debugging
-User experience
-Version control
-Project documentation
-Software delivery
-
-#👨‍💻 Author
-
-Yusuf Mamman
-
-Software Developer | Data Analyst | GIS Learner
-
-GitHub:
-
-https://github.com/whymamman-spec
-
-#📄 Project Status
-
-Status: MVP Complete ✅
-
-Project Type: Full-Stack Web Application
-
-Purpose: 3MTT NextGen Software Development Capstone Project
-
-Certification Context: Software Developer Certification Requirement
-
-#⭐ Acknowledgements
-
-Developed as part of the 3MTT NextGen Software Development program.
-
-Built with the goal of applying software development skills to a practical problem affecting healthcare appointment management.
+```bash
+cd server
+npm install
 ```
+
+## 6. Start the Backend
+
+Development:
+
+```bash
+npm run dev
+```
+
+Or:
+
+```bash
+npm start
+```
+
+The backend normally runs on:
+
+```text
+http://localhost:5000
+```
+
+---
+
+# Future Improvements
+
+## Database
+
+- Migrate from SQLite to PostgreSQL.
+- Introduce managed cloud database hosting.
+- Implement database backups and recovery.
+
+## Authentication
+
+- Patient accounts
+- Secure authentication
+- Password reset
+- Role-based access control
+- Staff/admin accounts
+
+## Clinic Management
+
+- Admin dashboard
+- Department management
+- Doctor/provider management
+- Clinic operating hours
+- Appointment capacity management
+
+## Notifications
+
+- Email booking confirmations
+- SMS reminders
+- Appointment reminders
+- Cancellation notifications
+
+## Appointment Management
+
+- Rescheduling
+- Appointment history
+- Doctor-specific schedules
+- Multiple appointment types
+- Waiting-list functionality
+
+## Security
+
+- Stronger server-side validation
+- Rate limiting
+- Authentication and authorization
+- Security headers
+- Audit logging
+- Protection of sensitive patient information
+
+## Scalability
+
+- Managed PostgreSQL
+- Persistent storage
+- Horizontal scaling
+- Background job processing
+- Monitoring and logging
+
+---
+
+# Learning Outcomes
+
+Developing ClinicQueue provided practical experience in:
+
+- React application development
+- Component-based UI architecture
+- React state management
+- React hooks
+- React Router
+- REST API consumption
+- Axios
+- Express.js
+- Node.js
+- SQLite database integration
+- SQL schema and seed data
+- CRUD-style workflows
+- Asynchronous JavaScript
+- Form validation
+- Error handling
+- Loading states
+- UX/UI refinement
+- Responsive design
+- Git and GitHub
+- API testing
+- Cloud deployment
+- Environment variables
+- Production debugging
+- Native Node.js dependency compatibility
+- Cloud database/storage limitations
+
+---
+
+# 3MTT NextGen Capstone
+
+ClinicQueue was developed as the **capstone project for the 3MTT NextGen
+Software Development cohort**.
+
+The project was a practical requirement for demonstrating the software
+development skills acquired during the program and formed part of the
+requirements for **Software Developer certification**.
+
+The project brought together the development concepts learned during the
+cohort into a complete application lifecycle:
+
+```text
+Planning
+   ↓
+Requirements
+   ↓
+UI Development
+   ↓
+Frontend Development
+   ↓
+Backend Development
+   ↓
+Database Integration
+   ↓
+API Testing
+   ↓
+UX/UI Polish
+   ↓
+Git/GitHub
+   ↓
+Deployment
+   ↓
+Production Testing
+```
+
+The completed application demonstrates the ability to move beyond
+isolated coding exercises and build, test, deploy, and document a
+working full-stack application.
+
+---
+
+# Project Status
+
+## MVP Status
+
+**Complete**
+
+## Deployment Status
+
+**Production deployment successful**
+
+## Production Testing
+
+**Passed**
+
+## Current Architecture
+
+```text
+Frontend: React + Vite + Tailwind CSS
+Backend: Node.js + Express
+Database: SQLite
+Frontend Hosting: Vercel
+Backend Hosting: Render
+Repository: GitHub
+```
+
+## Important Production Note
+
+The current SQLite implementation is appropriate for the capstone MVP
+and demonstration deployment, but a production healthcare system should
+migrate to a managed persistent database such as PostgreSQL before
+handling real-world patient data at scale.
+
+---
+
+# Author
+
+**Yusuf Mamman**
+
+Software Development Learner\
+3MTT NextGen Software Development Cohort
+
+**ClinicQueue --- Capstone Project**
+
+---
+
+## Acknowledgement
+
+This project was developed as part of the **3MTT NextGen Software
+Development program** and represents the practical application of
+software development concepts learned during the cohort.
